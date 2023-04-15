@@ -4,6 +4,7 @@ import DayColumn from "./DayColumn";
 import TimeForm from "./TimeForm";
 import DatePicker from "./DatePicker";
 import Head from 'next/head';
+import NoSSR from "../NoSSR";
 
 const Calendar = () => {
   const smallestScale = 1 / (1000 * 80);
@@ -80,42 +81,42 @@ const Calendar = () => {
   let containerHeight = scrollContainerRef.current?.clientHeight;
 
   return (
-    <>
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      height: 'calc(100vh - 12px)',
-    }}>
+    <NoSSR>
       <div style={{
-        flex: 1,
         display: "flex",
-        overflow: 'scroll',
-        border: '1px solid #000',
-        borderRadius: '5px',
-      }}
-        ref={scrollContainerRef}
-        onScroll={handleScroll}
-      >
-        {days.map((day, index) => (
-          <DayColumn
-            key={format(day, "yyyy-MM-dd")}
-            date={day}
-            showTimeValue={index === 0}
-            pixelPerMilisecondScale={pixelPerMilisecondScale}
-            scrollTop={scrollTop}
-            containerHeight={containerHeight}
-            selectTimeBlock={setSelectedTimeBlock}
-            selectedTimeBlock={selectedTimeBlock}
-            reloadFlag={reloadFlag}
-          />
-        ))}
+        flexDirection: "column",
+        height: 'calc(100vh - 12px)',
+      }}>
+        <div style={{
+          flex: 1,
+          display: "flex",
+          overflow: 'scroll',
+          border: '1px solid #000',
+          borderRadius: '5px',
+        }}
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+        >
+          {days.map((day, index) => (
+            <DayColumn
+              key={format(day, "yyyy-MM-dd")}
+              date={day}
+              showTimeValue={index === 0}
+              pixelPerMilisecondScale={pixelPerMilisecondScale}
+              scrollTop={scrollTop}
+              containerHeight={containerHeight}
+              selectTimeBlock={setSelectedTimeBlock}
+              selectedTimeBlock={selectedTimeBlock}
+              reloadFlag={reloadFlag}
+            />
+          ))}
+        </div>
+        <div >
+          {selectedTimeBlock ? <TimeForm onDataChange={reload} timeBlock={selectedTimeBlock} key={selectedTimeBlock.id || 'none'}></TimeForm> : <DatePicker date={date} setDate={setDate} />}
+        </div>
+
       </div>
-      <div >
-      {selectedTimeBlock ? <TimeForm onDataChange={reload} timeBlock={selectedTimeBlock} key={selectedTimeBlock.id || 'none'}></TimeForm> : <DatePicker date={date} setDate={setDate}/>}
-      </div>
-      
-    </div>
-    </>
+    </NoSSR>
   );
 };
 
