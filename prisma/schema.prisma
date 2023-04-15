@@ -1,0 +1,15 @@
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgrespw@kanade.local:5670/timetrack?schema=public"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model TimeBlock {
+  id              Int    @id @default(autoincrement())
+  startDateTime   Int
+  endDateTime     Int
+  spentOn         String
+}

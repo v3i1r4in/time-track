@@ -3,4 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
 }
 
-module.exports = nextConfig
+const withRPC = require('next-rpc');
+
+module.exports = withRPC(nextConfig)();
+// module.exports = nextConfig;

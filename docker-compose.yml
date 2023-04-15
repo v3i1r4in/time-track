@@ -1,0 +1,38 @@
+version: '3'
+services:
+  timetrack:
+    user: root
+    build: .
+    container_name: timetrack
+    ports:
+      - "9341:3000"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=shared
+      - traefik.http.routers.timetrack.rule=Host(`timetrack.svc.local`)
+    networks:
+      - shared
+  postgres:
+    container_name: postgres
+    user: root
+    image: postgres:13
+    restart: always
+    ports:
+      - "5670:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespw
+      POSTGRES_DB: timetrack
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - shared
+
+networks:
+  default:
+  shared:
+    external: true
+    name: shared
+
+volumes:
+  db-data:
