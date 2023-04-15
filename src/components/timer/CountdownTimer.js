@@ -7,6 +7,7 @@ const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
   const [timerActive, setTimerActiveState] = useState(false);
   const [startDateTime, setStartDateTimeState] = useState(null);
 
+  // set reamining and write to DB
   let setRemaining = async (value) => {
     const due = Math.floor((Date.now() + value * 1000) / 1000);
     await setTimer({
@@ -16,6 +17,7 @@ const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
     setRemainingState(value);
   }
 
+  // set timer active and write to DB
   let setTimerActive = async (isActive) => {
     await setTimer({ 
       name: 'count-down-timer',
@@ -25,6 +27,7 @@ const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
     setTimerActiveState(isActive);
   }
 
+  // set start date time and write to DB
   let setStartDateTime = async (value) => {
     await setTimer({
       name: 'count-down-timer',
@@ -33,6 +36,7 @@ const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
     setStartDateTimeState(value);
   }
 
+  // Sync internal state with DB
   const fetchTimerFromDB = async () => {
     const timer = await getTimer({ name: 'count-down-timer' });
     if (timer) {
@@ -48,34 +52,48 @@ const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
     }
   }
 
+  // when user changes duration on the UI
   const handleDurationChange = async (e) => {
     const newDuration = new Number(e.target.value) * 60;
     setDuration(newDuration);
     await setRemaining(newDuration);
   };
 
+  // when user clicks start
   const handleStart = async () => {
+    await setRemaining(remaining);
     await setStartDateTime(Math.floor(Date.now() / 1000));
     await setTimerActive(true);
   };
 
+  // when user clicks stop
   const handleStop = async () => {
-    await setTimerActive(false);
-    const endDateTime = Math.floor(Date.now() / 1000);
-    onCreateTimeBlock({ startDateTime, endDateTime, spentOn: activity });
+    if ((await getTimer({ name: 'count-down-timer' })).isActive) {
+      await setTimerActive(false);
+      onCreateTimeBlock({ 
+        startDateTime: startDateTime * 1000,
+        endDateTime: Date.now(),
+        spentOn: activity 
+      });
+    } else {
+      setTimerActiveState(false);
+    }
   };
 
+  // when user clicks reset
   const handleReset = async () => {
     await setRemaining(duration);
   }
 
+  // when component mounts, sync internal state with DB
   useEffect(() => {
     fetchTimerFromDB();
   }, []);
 
+  // if we are counting down, update remaining state
   useEffect(() => {
     if (timerActive && remaining > 0) {
-      const timerId = setTimeout(() => setRemaining(remaining - 1), 1000);
+      const timerId = setTimeout(() => setRemainingState(remaining - 1), 1000);
       return () => clearTimeout(timerId);
     } else if (!timerActive) {
       return;
@@ -83,6 +101,15 @@ const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
       handleStop().then(() => setTimeout(() => new window.Audio('/notify.wav').play(), 1000));
     }
   }, [timerActive, remaining, handleStop]);
+
+  // if we are counting down, check that hour state is in sync with DB
+  useEffect(() => {
+    (async () => {
+      if (!(await getTimer({ name: 'count-down-timer' })).isActive && timerActive) {
+          setTimerActive(false);
+      }
+    })();
+  }, [remaining]);
 
   return (
     <div>
@@ -98,6 +125,7 @@ const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
         <button disabled={timerActive || !activity || remaining == 0} onClick={handleStart}>Start</button>
         <button disabled={!timerActive} onClick={handleStop}>Stop</button>
         <button onClick={handleReset}>Reset</button>
+        <button onClick={() => location.reload()}>Refresh</button>
       </p>
     </div>
   );

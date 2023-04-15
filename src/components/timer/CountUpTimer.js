@@ -45,6 +45,14 @@ const CountUpTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
       return () => clearTimeout(timerId);
     }
   }, [timerActive, elapsed]);
+  
+  useEffect(() => {
+    (async () => {
+      if (!(await getTimer({ name: 'count-up-timer' })).isActive && timerActive) {
+          setTimerActive(false);
+      }
+    })();
+  }, [elapsed]);
 
   const handleStart = async () => {
     await setStartDateTime(Date.now());
@@ -52,13 +60,17 @@ const CountUpTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
   };
 
   const handleStop = async() => {
-    await setTimerActive(false);
-    const endDateTime = Date.now();
-    onCreateTimeBlock({ 
-      startDateTime: Math.floor(startDateTime/1000),
-      endDateTime: Math.floor(endDateTime/1000), spentOn: activity 
-    
-    });
+    if ((await getTimer({ name: 'count-up-timer' })).isActive) {
+      await setTimerActive(false);
+      const endDateTime = Date.now();
+      onCreateTimeBlock({ 
+        startDateTime,
+        endDateTime,
+        spentOn: activity 
+      });
+    } else {
+      setTimerActiveState(false);
+    }
   };
 
   const handleClear = () => {
@@ -72,6 +84,7 @@ const CountUpTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
         <button disabled={timerActive || !activity} onClick={handleStart}>Start</button>
         <button disabled={!timerActive} onClick={handleStop}>Stop</button>
         <button onClick={handleClear}>Clear</button>
+        <button onClick={() => location.reload()}>Refresh</button>
       </p>
     </div>
   );

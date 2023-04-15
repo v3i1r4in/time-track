@@ -28,8 +28,9 @@ const TimeEntryForm = ({ onActivityChange, onModeChange, activity }) => {
         }}
       >
         <label>
-          <Select 
-            defaultValue={activity}
+          <Select
+            value={{value: activity, label: activity}}
+            // defaultValue={activity}
             options={pastActivities.map(a => ({value: a, label: a}))}
             onChange={handleActivityChange}
           />
