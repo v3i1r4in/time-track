@@ -55,21 +55,17 @@ const Calendar = () => {
   };
 
   useEffect(() => {
+    if (!scrollContainerRef.current) {
+      return;
+    }
+
     const containerElement = scrollContainerRef.current;
     containerElement.addEventListener("wheel", handleWheel, { passive: false });
 
     return () => {
       containerElement.removeEventListener("wheel", handleWheel, { passive: false });
     };
-  }, [handleWheel]);
-
-  useEffect(() => {
-    const containerElement = scrollContainerRef.current;
-    containerElement.addEventListener("wheel", handleWheel, { passive: false });
-    return () => {
-      containerElement.removeEventListener("wheel", handleWheel, { passive: false });
-    };
-  }, [handleWheel]);
+  }, [handleWheel, scrollContainerRef.current]);
 
   useEffect(() => {
     handleScroll();
