@@ -68,11 +68,12 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
         zIndex: 33,
         color: selected ? '#fff' : '#000',
 
-        textAlign: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
-    ><div>
-      {spentOn}
-      </div>
+    >
+    {spentOn}
     </div>
   );
 };

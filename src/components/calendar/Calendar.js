@@ -3,6 +3,7 @@ import { format, startOfWeek, addDays } from "date-fns";
 import DayColumn from "./DayColumn";
 import TimeForm from "./TimeForm";
 import DatePicker from "./DatePicker";
+import Head from 'next/head';
 
 const Calendar = () => {
   const smallestScale = 1 / (1000 * 80);
@@ -79,6 +80,7 @@ const Calendar = () => {
   let containerHeight = scrollContainerRef.current?.clientHeight;
 
   return (
+    <>
     <div style={{
       display: "flex",
       flexDirection: "column",
@@ -113,6 +115,7 @@ const Calendar = () => {
       </div>
       
     </div>
+    </>
   );
 };
 

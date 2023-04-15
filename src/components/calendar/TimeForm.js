@@ -13,23 +13,14 @@ const getHours = (dateTime) => {
 const TimeForm = ({ onDataChange, timeBlock }) => {
   const [startTimeHour, setStartTimeHour] = useState(getHours(timeBlock.startDateTime));
   const [startTimeMinute, setStartTimeMinute] = useState(getMinutes(timeBlock.startDateTime));
-  const [endTimeHour, setEndTimeHour] = useState(getHours(timeBlock.endDateTime));
-  const [endTimeMinute, setEndTimeMinute] = useState(getMinutes(timeBlock.endDateTime));
+  const [durationMinutes, setDurationMinutes ] = useState((timeBlock.endDateTime - timeBlock.startDateTime) / 1000 / 60);
   const [spentOn, setSpentOn] = useState(timeBlock.spentOn);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const originalStartDateTime = new Date(timeBlock.startDateTime);
     const newStartDateTime = new Date(originalStartDateTime.getFullYear(), originalStartDateTime.getMonth(), originalStartDateTime.getDate(), startTimeHour, startTimeMinute);
-
-    const orginalEndDateTime = new Date(timeBlock.endDateTime);
-    const newEndDateTime = new Date(orginalEndDateTime.getFullYear(), orginalEndDateTime.getMonth(), orginalEndDateTime.getDate(), endTimeHour, endTimeMinute);
-
-
-    if (newStartDateTime.getTime() >= newEndDateTime.getTime()) {
-        alert('Start time must be before end time');
-        return;
-    }
+    const newEndDateTime = new Date(newStartDateTime.getTime() + durationMinutes * 60 * 1000);
 
     const newTimeBlock = {
         ...timeBlock,
@@ -81,22 +72,13 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
           />
         </label>
         <label style={{ marginLeft: '15px' }}>
-          End Time:
+          Duration
           <input
             type="number"
-            min="0"
-            max="23"
-            value={endTimeHour}
-            onChange={(event) => setEndTimeHour(event.target.value)}
-            style={{ marginLeft: '5px', width: '60px' }}
-          />
-          :
-          <input
-            type="number"
-            min="0"
-            max="59"
-            value={endTimeMinute}
-            onChange={(event) => setEndTimeMinute(event.target.value)}
+            min="1"
+            max={`${24 * 60}`}
+            value={durationMinutes}
+            onChange={(event) => setDurationMinutes(event.target.value)}
             style={{ marginLeft: '5px', width: '60px' }}
           />
         </label>
