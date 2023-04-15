@@ -66,10 +66,38 @@ export async function listTimeBlocks(startDateRange, endDateRange) {
 
 // 3. Delete function
 export async function deleteTimeBlock({ id }) {
-  console.log(id);
   const deletedTimeBlock = await prisma.timeBlock.delete({
     where: { id },
   });
 
   return deletedTimeBlock;
+}
+
+
+export async function setTimer({ name, due, start, isActive, activity }) {
+  const timer = await prisma.timer.upsert({
+    where: { name },
+    update: { 
+      start,
+      due,
+      isActive,
+      activity,
+    },
+    create: { 
+      name,
+      start: start || 0,
+      due: due || 0,
+      isActive: isActive || false
+    },
+  });
+
+  return timer;
+}
+
+export async function getTimer({ name }) {
+  const timer = await prisma.timer.findUnique({
+    where: { name },
+  });
+
+  return timer;
 }

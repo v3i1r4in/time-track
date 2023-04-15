@@ -39,6 +39,20 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
     onDataChange();
   };
 
+  const handleCopy = async (e) => {
+    e.preventDefault();
+    const duration = timeBlock.endDateTime - timeBlock.startDateTime;
+
+    const copied = {
+        startDateTime: timeBlock.endDateTime + 15 * 60 * 1000,
+        endDateTime: timeBlock.endDateTime + duration + 15 * 60 * 1000,
+        spentOn,
+    };
+
+    await upsertTimeBlock(copied);
+    onDataChange();
+  };
+
   return (
     <form onSubmit={handleSubmit} style={{ 
         display: 'flex', 
@@ -94,6 +108,7 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
       </div>
       <div>
         <button type="submit" style={{ marginRight: '5px' }}>Submit</button>
+        <button type="button" style={{ marginRight: '5px' }} onClick={handleCopy}>Copy</button>
         <button type="button" style={{ marginRight: '5px' }} onClick={handleDelete}>Delete</button>
         <button type="button" onClick={onDataChange}>Cancel</button>
       </div>

@@ -55,7 +55,6 @@ const DayColumn = ({
 
     const handleDoubleClick = async (event) => {
         const parentRect = ref.current.getBoundingClientRect();
-        // console.log(event.target);
         const top = event.clientY - parentRect.top;
         // convert top to time
         const time = startDate + top / pixelPerMilisecondScale;
@@ -100,7 +99,7 @@ const DayColumn = ({
         if (nextTime < Date.now()) {
             backgroundColor = "#bbb";
         } else if (currentTime < Date.now()) {
-            backgroundColor = "#ccc";
+            backgroundColor = "#ddd";
         }
 
         if (containerHeight) {

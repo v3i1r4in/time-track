@@ -13,3 +13,11 @@ model TimeBlock {
   endDateTime     Int
   spentOn         String
 }
+
+model Timer {
+  name       String @id
+  start      Int?
+  due        Int?
+  isActive   Boolean
+  activity   String @default("")
+}

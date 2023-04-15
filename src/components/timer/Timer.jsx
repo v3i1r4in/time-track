@@ -4,6 +4,7 @@ import CountdownTimer from "./CountdownTimer";
 import CountUpTimer from "./CountUpTimer";
 import TimeBlockList from "./TimeBlockList";
 import { upsertTimeBlock } from "@/pages/api/db";
+import NoSSR from "../NoSSR";
 
 function Timer() {
   const [timeBlocks, setTimeBlocks] = useState([]);
@@ -36,20 +37,23 @@ function Timer() {
             backgroundColor: "#f5f5f5"
         }}
     >
-      <TimeEntryForm
-        onActivityChange={handleActivityChange}
-        onModeChange={handleModeChange}
-        activity={activity}
-      />
-      {timerMode === "countdown" ? (
-        <CountdownTimer
-          onCreateTimeBlock={handleTimeBlockCreation}
+      <NoSSR>
+        <TimeEntryForm
+          onActivityChange={handleActivityChange}
+          onModeChange={handleModeChange}
           activity={activity}
         />
-      ) : (
-        <CountUpTimer onCreateTimeBlock={handleTimeBlockCreation} activity={activity} />
-      )}
-      <TimeBlockList timeBlocks={timeBlocks} />
+        {timerMode === "countdown" ? (
+          <CountdownTimer
+            onCreateTimeBlock={handleTimeBlockCreation}
+            activity={activity}
+            setActivity={setActivity}
+          />
+        ) : (
+          <CountUpTimer onCreateTimeBlock={handleTimeBlockCreation} activity={activity} setActivity={setActivity} />
+        )}
+        <TimeBlockList timeBlocks={timeBlocks} />
+      </NoSSR>
     </div>
   );
 }
