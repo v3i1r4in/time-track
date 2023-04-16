@@ -7,6 +7,7 @@ export default function Home() {
   return (
     <>
       <Head>
+        <link rel="icon" href="/chronometer.ico" />
         <title>Timer | Timetrack</title>
       </Head>
       <NoSSR>
