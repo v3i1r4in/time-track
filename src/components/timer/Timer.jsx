@@ -12,7 +12,9 @@ function Timer() {
   const [activity, setActivity] = useState("");
 
   const loadTimeBlocks = async () => {
-    setTimeBlocks(await listTimeBlocks(Date.now() - 1000 * 60 * 60 * 24, Date.now()));
+    const timeBlocks = await listTimeBlocks(Date.now() - 1000 * 60 * 60 * 24, Date.now());
+    timeBlocks.sort((a, b) => b.start - a.start);
+    setTimeBlocks(timeBlocks);
   };
 
   const setTimerMode = (newMode) => {
