@@ -13,7 +13,7 @@ function Timer() {
 
   const loadTimeBlocks = async () => {
     const timeBlocks = await listTimeBlocks(Date.now() - 1000 * 60 * 60 * 24, Date.now());
-    timeBlocks.sort((a, b) => b.start - a.start);
+    timeBlocks.sort((a, b) => b.startDateTime - a.startDateTime);
     setTimeBlocks(timeBlocks);
   };
 
