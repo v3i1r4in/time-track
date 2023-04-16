@@ -4,6 +4,9 @@ const nextConfig = {
 }
 
 const withRPC = require('next-rpc');
+const withPWA = require('next-pwa')({
+  dest: 'public'
+});
 
-module.exports = withRPC(nextConfig)();
+module.exports = withPWA(withRPC(nextConfig)());
 // module.exports = nextConfig;
