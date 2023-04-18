@@ -1,3 +1,4 @@
+import { unparseDurationMinutes } from "@/utils/duration";
 import React, { useState } from "react";
 
 function generateColorSeed(str) {
@@ -71,9 +72,11 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        flexDirection: 'column',
       }}
     >
-    {spentOn}
+    <div>{spentOn}</div>
+    <div>{unparseDurationMinutes((endDateTime - startDateTime) / 1000 / 60)}</div>
     </div>
   );
 };

@@ -79,7 +79,7 @@ const CountUpTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
 
   return (
     <div>
-      <div style={{ fontSize: '30pt' }}>{Math.floor(elapsed / 60)}:{elapsed % 60}</div>
+      <div style={{ fontSize: '30pt' }}>{Math.floor(elapsed / 60).toString().padStart(2, '0')}:{(elapsed % 60).toString().padStart(2, '0')}</div>
       <p>
         <button disabled={timerActive || !activity} onClick={handleStart}>Start</button>
         <button disabled={!timerActive} onClick={handleStop}>Stop</button>

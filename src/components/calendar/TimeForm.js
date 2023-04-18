@@ -1,4 +1,5 @@
 import { deleteTimeBlock, upsertTimeBlock } from '@/pages/api/db';
+import { parseDurationMinutes, unparseDurationMinutes } from '@/utils/duration';
 import React, { useState } from 'react';
 
 const getMinutes = (dateTime) => {
@@ -16,6 +17,8 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
   const [endTimeHour, setEndTimeHour] = useState(getHours(timeBlock.endDateTime));
   const [endTimeMinute, setEndTimeMinute] = useState(getMinutes(timeBlock.endDateTime));
   const [spentOn, setSpentOn] = useState(timeBlock.spentOn);
+  const [durationBorderColor, setDurationBorderColor] = useState(null);
+  const [duration, setDuration] = useState(unparseDurationMinutes((timeBlock.endDateTime - timeBlock.startDateTime) / 1000 / 60));
 
   const originalStartDateTime = new Date(timeBlock.startDateTime);
 
@@ -135,12 +138,19 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
         <label style={{ marginLeft: '15px' }}>
           Duration
           <input
-            type="number"
-            min="1"
-            max={`${24 * 60}`}
-            value={durationMinutes}
-            onChange={(event) => setDurationMinutes(event.target.value)}
-            style={{ marginLeft: '5px', width: '60px' }}
+            type="string"
+            value={duration}
+            onChange={(event) => {
+              setDuration(event.target.value);
+              try {
+                setDurationMinutes(parseDurationMinutes(event.target.value));
+                setDurationBorderColor(null);
+              } catch (e) {
+                console.log(e);
+                setDurationBorderColor('red');
+              }
+            }}
+            style={{ marginLeft: '5px', width: '60px', borderColor: durationBorderColor, outlineColor: durationBorderColor}}
           />
         </label>
         <label style={{ marginLeft: '15px' }}>
