@@ -24,7 +24,7 @@ services:
       POSTGRES_PASSWORD: postgrespw
       POSTGRES_DB: timetrack
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - D:/Services/Timetrack/postgresql/data:/var/lib/postgresql/data
     networks:
       - shared
 
@@ -33,6 +33,3 @@ networks:
   shared:
     external: true
     name: shared
-
-volumes:
-  db-data:

@@ -1,2 +1,2 @@
 #!/bin/bash
-docker -H ssh://veilrain@kanade.local "$@"
+docker -H ssh://veilrain@mercury.local "$@"

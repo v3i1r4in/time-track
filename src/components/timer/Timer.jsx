@@ -8,7 +8,7 @@ import NoSSR from "../NoSSR";
 
 function Timer() {
   const [timeBlocks, setTimeBlocks] = useState([]);
-  const [timerMode, setTimerModeState] = useState(window.localStorage.getItem("timerMode") || "countdown");
+  const [timerMode, setTimerModeState] = useState(window.localStorage.getItem("timerMode") || "countup");
   const [activity, setActivity] = useState("");
 
   const loadTimeBlocks = async () => {

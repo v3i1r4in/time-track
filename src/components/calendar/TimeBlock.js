@@ -30,7 +30,7 @@ function hexToRgbA(hex, a) {
       c = [c[0], c[0], c[1], c[1], c[2], c[2]];
     }
     c = '0x' + c.join('');
-    return `rgba(${0.5 * ((c >> 16) & 255)}, ${0.5 * ((c >> 8) & 255)}, ${0.5 * (c & 255)}, ${a})`;
+    return `rgba(${((c >> 16) & 255)}, ${((c >> 8) & 255)}, ${(c & 255)}, ${a})`;
   }
   throw new Error('Bad Hex');
 }
@@ -62,7 +62,7 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
         position: "absolute",
         top: `${topPosition}px`,
         width: "100%",
-        background: hexToRgbA(color, selected ? 1 : 0.3),
+        background: hexToRgbA(color, selected ? 1 : 0.7),
         borderTop: "3px solid " + color,
         overflow: "hidden",
         height: height,
