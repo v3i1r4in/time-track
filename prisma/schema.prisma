@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:postgrespw@kanade.local:5670/timetrack?schema=public"
+  url      = "postgresql://postgres:postgrespw@mercury.local:5670/timetrack?schema=public"
 }
 
 generator client {
