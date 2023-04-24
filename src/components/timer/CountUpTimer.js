@@ -77,9 +77,22 @@ const CountUpTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
     setElapsed(0);
   }
 
+
+  let hours = Math.floor(elapsed / 3600);
+  let minutes = Math.floor((elapsed % 3600) / 60);
+  let seconds = elapsed % 60;
+
+  let timeDisplay = seconds.toString().padStart(2, '0');
+  if (minutes > 0) {
+    timeDisplay = minutes.toString().padStart(2, '0') + ':' + timeDisplay;
+  }
+  if (hours > 0) {
+    timeDisplay = hours.toString().padStart(2, '0') + ':' + timeDisplay;
+  }
+
   return (
     <div>
-      <div style={{ fontSize: '30pt' }}>{Math.floor(elapsed / 60).toString().padStart(2, '0')}:{(elapsed % 60).toString().padStart(2, '0')}</div>
+      <div style={{ fontSize: '30pt' }}>{timeDisplay}</div>
       <p>
         <button disabled={timerActive || !activity} onClick={handleStart}>Start</button>
         <button disabled={!timerActive} onClick={handleStop}>Stop</button>
