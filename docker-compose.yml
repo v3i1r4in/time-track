@@ -2,6 +2,7 @@ version: '3'
 services:
   timetrack:
     user: root
+    restart: always
     build: .
     container_name: timetrack
     ports:
