@@ -3,6 +3,8 @@ services:
   timetrack:
     user: root
     restart: always
+    depends_on:
+      - postgres
     build: .
     container_name: timetrack
     ports:
