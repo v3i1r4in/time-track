@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:postgrespw@mercury.local:5670/timetrack?schema=public&connection_timeout=0&pool_timeout=0"
+  url      = "postgresql://postgres:postgrespw@host.docker.internal:5670/timetrack?schema=public&connection_timeout=3000&pool_timeout=3000"
 }
 
 generator client {
