@@ -19,6 +19,7 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
   const [spentOn, setSpentOn] = useState(timeBlock.spentOn);
   const [durationBorderColor, setDurationBorderColor] = useState(null);
   const [duration, setDuration] = useState(unparseDurationMinutes((timeBlock.endDateTime - timeBlock.startDateTime) / 1000 / 60));
+  const [memo, setMemo] = useState(timeBlock.memo || '');
 
   const originalStartDateTime = new Date(timeBlock.startDateTime);
 
@@ -57,6 +58,7 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
       startDateTime: newStartDateTime.getTime(),
       endDateTime: newEndDateTime.getTime(),
       spentOn,
+      memo,
     };
 
     await upsertTimeBlock(newTimeBlock);
@@ -84,92 +86,99 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{
-      display: 'flex',
-      justifyContent:
-        'space-between',
-      alignItems: 'center',
-      marginTop: '4px',
-      padding: '4px',
+    <div style={{
+      padding: '7px',
       border: '1px solid #000',
       borderRadius: '5px',
+      lineHeight: '1.5',
     }}>
-      <div>
-        <label>
-          Start Time:
-          <input
-            type="number"
-            min="0"
-            max="23"
-            value={startTimeHour}
-            onChange={(event) => setStartTimeHour(event.target.value)}
-            style={{ marginLeft: '5px', width: '60px' }}
-          />
-          :
-          <input
-            type="number"
-            min="0"
-            max="59"
-            value={startTimeMinute}
-            onChange={(event) => setStartTimeMinute(event.target.value)}
-            style={{ marginLeft: '5px', width: '60px' }}
-          />
-        </label>
-        <label>
-          End Time:
-          <input
-            type="number"
-            min="0"
-            max="23"
-            value={endTimeHour}
-            onChange={(event) => setEndTimeHour(event.target.value)}
-            style={{ marginLeft: '5px', width: '60px' }}
-          />
-          :
-          <input
-            type="number"
-            min="0"
-            max="59"
-            value={endTimeMinute}
-            onChange={(event) => setEndTimeMinute(event.target.value)}
-            style={{ marginLeft: '5px', width: '60px' }}
-          />
-        </label>
-        <label style={{ marginLeft: '15px' }}>
-          Duration
-          <input
-            type="string"
-            value={duration}
-            onChange={(event) => {
-              setDuration(event.target.value);
-              try {
-                setDurationMinutes(parseDurationMinutes(event.target.value));
-                setDurationBorderColor(null);
-              } catch (e) {
-                console.log(e);
-                setDurationBorderColor('red');
-              }
-            }}
-            style={{ marginLeft: '5px', width: '60px', borderColor: durationBorderColor, outlineColor: durationBorderColor}}
-          />
-        </label>
-        <label style={{ marginLeft: '15px' }}>
-          Spent On:
-          <input
-            type="text"
-            value={spentOn}
-            onChange={(event) => setSpentOn(event.target.value)}
-            style={{ marginLeft: '5px' }}
-          />
-        </label>
-      </div>
-      <div>
-        <button type="submit" style={{ marginRight: '5px' }}>Submit</button>
-        <button type="button" style={{ marginRight: '5px' }} onClick={handleCopy}>Copy</button>
-        <button type="button" style={{ marginRight: '5px' }} onClick={handleDelete}>Delete</button>
-        <button type="button" onClick={onDataChange}>Cancel</button>
-      </div>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <div>
+            <label>
+              From
+              <input
+                type="number"
+                min="0"
+                max="23"
+                value={startTimeHour}
+                onChange={(event) => setStartTimeHour(event.target.value)}
+                style={{ marginLeft: '5px', width: '60px' }}
+              />
+              :
+              <input
+                type="number"
+                min="0"
+                max="59"
+                value={startTimeMinute}
+                onChange={(event) => setStartTimeMinute(event.target.value)}
+                style={{ marginLeft: '5px', width: '60px' }}
+              />
+            </label>
+            <label  style={{ marginLeft: '5px' }}>
+              To
+              <input
+                type="number"
+                min="0"
+                max="23"
+                value={endTimeHour}
+                onChange={(event) => setEndTimeHour(event.target.value)}
+                style={{ marginLeft: '5px', width: '60px' }}
+              />
+              :
+              <input
+                type="number"
+                min="0"
+                max="59"
+                value={endTimeMinute}
+                onChange={(event) => setEndTimeMinute(event.target.value)}
+                style={{ marginLeft: '5px', width: '60px' }}
+              />
+            </label>
+            <label style={{ marginLeft: '5px' }}>
+              Length
+              <input
+                type="string"
+                value={duration}
+                onChange={(event) => {
+                  setDuration(event.target.value);
+                  try {
+                    setDurationMinutes(parseDurationMinutes(event.target.value));
+                    setDurationBorderColor(null);
+                  } catch (e) {
+                    console.log(e);
+                    setDurationBorderColor('red');
+                  }
+                }}
+                style={{ marginLeft: '5px', width: '60px', borderColor: durationBorderColor, outlineColor: durationBorderColor }}
+              />
+            </label>
+          </div>
+          <div style={{ marginTop: '10px', width: '100%'}}>
+          <label>
+            Title
+            <input
+              type="text"
+              value={spentOn}
+              onChange={(event) => setSpentOn(event.target.value)}
+              style={{ marginLeft: '5px' }}
+            />
+            <div  style={{ marginTop: '10px', width: '100%'}}>
+            <textarea onChange={e => setMemo(e.target.value)} value={memo} style={{ width: '95%', maxWidth: '95%'}}></textarea>
+            </div>
+          </label>
+          </div>
+        </div>
+        <div style={{
+          textAlign: 'right',
+        }}>
+          <button type="button" style={{ marginRight: '5px', backgroundColor: '#ffcccc' }} onClick={handleDelete}>Delete</button>
+          <button type="button" style={{ marginRight: '5px', backgroundColor: '#ffffcc' }} onClick={handleCopy}>Copy</button>
+          <button type="button" style={{ marginRight: '5px', backgroundColor: '#cccccc' }} onClick={onDataChange}>Cancel</button>
+          <button type="submit" style={{ marginRight: '0px', backgroundColor: '#ccffcc' }}>Submit</button>
+        </div>
+      </form>
+    </div>
   );
 };
 

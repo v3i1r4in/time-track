@@ -15,6 +15,9 @@ const Calendar = () => {
   const [scrollTop, setScrollTop] = useState(0);
   const [selectedTimeBlock, setSelectedTimeBlock] = useState(null);
   const [reloadFlag, setReloadFlag] = useState(0.123123);
+  const [calendarOptions, setCalendarOptions] = useState({
+    stackView: false,
+  });
 
   const reload = () => {
     setReloadFlag(Math.random());
@@ -76,36 +79,49 @@ const Calendar = () => {
       <div style={{
         display: "flex",
         flexDirection: "column",
-        height: 'calc(100vh - 12px)',
+        height: '100%',
       }}>
         <div style={{
           flex: 1,
-          display: "flex",
-          overflow: 'scroll',
           border: '1px solid #000',
           borderRadius: '5px',
+          position: 'relative',
         }}
           ref={scrollContainerRef}
           onScroll={handleScroll}
         >
-          {days.map((day, index) => (
-            <DayColumn
-              key={format(day, "yyyy-MM-dd")}
-              date={day}
-              showTimeValue={index === 0}
-              pixelPerMilisecondScale={pixelPerMilisecondScale}
-              scrollTop={scrollTop}
-              containerHeight={containerHeight}
-              selectTimeBlock={setSelectedTimeBlock}
-              selectedTimeBlock={selectedTimeBlock}
-              reloadFlag={reloadFlag}
-            />
-          ))}
+          <div style={{
+            position: 'absolute',
+            top: '0px',
+            bottom: '0px',
+            left: '0px',
+            right: '0px',
+            overflow: 'scroll',
+            // overflow: 'scroll',
+            display: "flex",
+          }}>
+            {days.map((day, index) => (
+              <DayColumn
+                key={format(day, "yyyy-MM-dd")}
+                date={day}
+                showTimeValue={index === 0}
+                pixelPerMilisecondScale={pixelPerMilisecondScale}
+                scrollTop={scrollTop}
+                containerHeight={containerHeight}
+                selectTimeBlock={setSelectedTimeBlock}
+                selectedTimeBlock={selectedTimeBlock}
+                reloadFlag={reloadFlag}
+                calendarOptions={calendarOptions}
+              />
+            ))}
+          </div>
         </div>
-        <div >
-          {selectedTimeBlock ? <TimeForm onDataChange={reload} timeBlock={selectedTimeBlock} key={selectedTimeBlock.id || 'none'}></TimeForm> : <DatePicker date={date} setDate={setDate} />}
+        <div style={{
+          marginTop: "10px",
+        }}>
+          {selectedTimeBlock ? <TimeForm onDataChange={reload} timeBlock={selectedTimeBlock} key={selectedTimeBlock.id || 'none'}></TimeForm> : <DatePicker date={date} setDate={setDate} calendarOptions={calendarOptions
+          } setCalendarOptions={setCalendarOptions}/>}
         </div>
-
       </div>
     </NoSSR>
   );

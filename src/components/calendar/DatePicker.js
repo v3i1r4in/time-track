@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DatePicker = ({date, setDate}) => {
+const DatePicker = ({date, setDate, calendarOptions, setCalendarOptions}) => {
   const handleDateChange = (event) => {
     setDate(new Date(event.target.value));
   };
@@ -21,6 +21,17 @@ const DatePicker = ({date, setDate}) => {
         value={date.toISOString().substring(0, 10)}
         onChange={handleDateChange}
         />
+        {/* checkbox */}
+        <div style={{ marginLeft: '5px' }}>
+          <label>
+            <input
+              type="checkbox"
+              checked={calendarOptions.stackView}
+              onChange={(event) => setCalendarOptions({...calendarOptions, stackView: event.target.checked})}
+            />
+            Stack View
+          </label>
+        </div>
     </div>
   );
 };

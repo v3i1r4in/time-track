@@ -15,7 +15,7 @@ const dateToEpochSeconds = (date) => {
 
 // 1. Upsert function
 export async function upsertTimeBlock(data) {
-  let { startDateTime, endDateTime, spentOn, id } = data;
+  let { startDateTime, endDateTime, spentOn, id, memo } = data;
 
   startDateTime = dateToEpochSeconds(startDateTime);
   endDateTime = dateToEpochSeconds(endDateTime);
@@ -27,6 +27,7 @@ export async function upsertTimeBlock(data) {
         startDateTime,
         endDateTime,
         spentOn,
+        memo,
       },
     })
   } else {
@@ -35,6 +36,7 @@ export async function upsertTimeBlock(data) {
         startDateTime,
         endDateTime,
         spentOn,
+        memo,
       },
     })
   }

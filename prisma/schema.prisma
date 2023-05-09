@@ -12,6 +12,7 @@ model TimeBlock {
   startDateTime   Int
   endDateTime     Int
   spentOn         String
+  memo            String?
 }
 
 model Timer {

@@ -11,7 +11,7 @@ const TimeEntryForm = ({ onActivityChange, onModeChange, activity }) => {
     };
 
     fetchPastActivities();
-  });
+  }, []);
 
   const handleActivityChange = ({ value: val }) => {
     onActivityChange(val);

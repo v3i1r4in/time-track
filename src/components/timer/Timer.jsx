@@ -52,13 +52,15 @@ function Timer() {
             flexDirection: "column",
             justifyContent: "top",
             alignItems: "center",
-            minHeight: "100vh",
+            height: "100%",
             textAlign: "center",
-            backgroundColor: "#f5f5f5",
-            paddingTop: '20px'
+            // backgroundColor: "#f5f5f5",
+            borderRadius: '10px',
+            border: '1px solid #000',
         }}
     >
       <NoSSR>
+        <p></p>
         <TimeEntryForm
           onActivityChange={handleActivityChange}
           onModeChange={handleModeChange}

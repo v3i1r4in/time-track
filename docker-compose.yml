@@ -13,6 +13,9 @@ services:
       - traefik.enable=true
       - traefik.docker.network=shared
       - traefik.http.routers.timetrack.rule=Host(`timetrack.svc.local`)
+      - traefik.http.routers.timetracktls.rule=Host(`timer.svc.local`)
+      - traefik.http.routers.timetracktls.service=timetrack-time-track
+      - traefik.http.routers.timetracktls.tls=true
     network_mode: bridge
   postgres:
     container_name: postgres
