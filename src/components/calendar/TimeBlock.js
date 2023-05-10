@@ -110,7 +110,7 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
       }}
     >
       < div style={{ margin: '3px'}}>
-    {(!calendarOptions.stackView || timeBlock.durationSum) && <div>
+    {(!calendarOptions.stackView || timeBlock.durationSum !== undefined) && <div>
       {calendarOptions.stackView
         ? `(${unparseDurationMinutes(timeBlock.durationSum / 1000 / 60)        }) ${spentOn}`
         : `(${unparseDurationMinutes((endDateTime - startDateTime) / 1000 / 60)}) ${spentOn}`

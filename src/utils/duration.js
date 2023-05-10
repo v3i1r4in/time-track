@@ -32,5 +32,5 @@ export function unparseDurationMinutes(minutes) {
     let result = '';
     if (hours) result += `${hours}h`;
     if (minutes) result += `${minutes}m`;
-    return result;
+    return result || '0m';
 }

@@ -189,7 +189,6 @@ const DayColumn = ({
 
     let timeBlocksSorted = [...timeBlocks]
     if (calendarOptions.stackView) {
-
         // sort time blocks by spentOn and startDateTime
         timeBlocksSorted.sort((a, b) => {
             if (a.spentOn < b.spentOn) {
@@ -224,13 +223,23 @@ const DayColumn = ({
             }, 0);
         });
 
+        let totalTime = 0;
         // add duration sum to the first appearance of each spentOn
         timeBlocksSorted.forEach((timeBlock) => {
             if (timeBlockDurationsBySpentOn[timeBlock.spentOn]) {
                 timeBlock.durationSum = timeBlockDurationsBySpentOn[timeBlock.spentOn];
+                totalTime += timeBlock.durationSum;
                 delete timeBlockDurationsBySpentOn[timeBlock.spentOn];
             }
         });
+
+        timeBlocksSorted = [{
+            id: 'total',
+            spentOn: 'Total Recorded Time',
+            durationSum: totalTime || 0,
+            startDateTime: startDate,
+            endDateTime: startDate + 100000,
+        }, ...timeBlocksSorted];
     }
 
     return (
