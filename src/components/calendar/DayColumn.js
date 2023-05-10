@@ -241,7 +241,7 @@ const DayColumn = ({
             spentOn: 'Total Recorded Time',
             durationSum: totalTime || 0,
             startDateTime: startDate,
-            endDateTime: startDate + 100000,
+            endDateTime: startDate,
         }, ...timeBlocksSorted];
     }
 
