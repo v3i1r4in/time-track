@@ -160,6 +160,7 @@ const DayColumn = ({
                     height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
                     borderBottom: '2px solid #ed3e7b',
                     zIndex: 100,
+                    pointerEvents: 'none',
                 }}
                 onClick={e => e.preventDefault()}
                 >
