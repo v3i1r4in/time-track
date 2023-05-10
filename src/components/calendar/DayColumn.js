@@ -52,9 +52,8 @@ const DayColumn = ({
                     spentOn: activeTimer.activity,
                 });
             }
-    
-            setTimeBlocks(timeBlocks);
         }
+        setTimeBlocks(timeBlocks);
     };
 
     useEffect(() => {
