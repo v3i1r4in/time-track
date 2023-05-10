@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
-import { listTimeBlocks, upsertTimeBlock } from "@/pages/api/db";
+import { getActiveTimer, listTimeBlocks, upsertTimeBlock } from "@/pages/api/db";
 import TimeBlock from "./TimeBlock";
 import Calendar from "./Calendar";
 import t from "react-autocomplete-input";
@@ -33,18 +33,33 @@ const DayColumn = ({
     const startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0).getTime() + miliOffeset;
     const endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 0).getTime() + miliOffeset;
 
+
+    const isToday = new Date().toDateString() === date.toDateString();
+
     const loadTimeBlocks = async () => {
-        setTimeBlocks(await listTimeBlocks(
+        const timeBlocks = await listTimeBlocks(
             startDate,
             endDate
-        ));
+        );
+        
+        if (isToday) {
+            const activeTimer = await getActiveTimer();
+            if (activeTimer) {
+                timeBlocks.push({
+                    id: 'active-timer',
+                    startDateTime: activeTimer.start * 1000,
+                    endDateTime: Date.now(),
+                    spentOn: activeTimer.activity,
+                });
+            }
+    
+            setTimeBlocks(timeBlocks);
+        }
     };
 
     useEffect(() => {
         loadTimeBlocks();
     }, [reloadFlag]);
-
-    const isToday = new Date().toDateString() === date.toDateString();
 
     // Time Grid Lines
     let hours = 24;
@@ -130,7 +145,22 @@ const DayColumn = ({
                     right: 0,
                     height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
                     backgroundColor: isSidebar ? '#AAA' : undefined,
-                    borderBottom: '2px solid red',
+                    zIndex: 0,
+                }}>
+
+                </div>
+            )
+            timeGrid.push(
+                <div 
+                key="currentTimeLine"
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
+                    borderBottom: '2px solid #ed3e7b',
+                    zIndex: 999,
                 }}>
 
                 </div>

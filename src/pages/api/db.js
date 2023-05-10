@@ -103,3 +103,11 @@ export async function getTimer({ name }) {
 
   return timer;
 }
+
+// find the first timer that is active
+export async function getActiveTimer() {
+  const timer = await prisma.timer.findFirst({
+    where: { isActive: true },
+  });
+  return timer;
+}
