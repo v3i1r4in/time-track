@@ -79,7 +79,7 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
   // };
 
   const topPosition = (startDateTime - initialDateTime) * pixelPerMilisecondScale;
-  const height = (endDateTime - startDateTime) * pixelPerMilisecondScale;
+  const height = (endDateTime - startDateTime) * pixelPerMilisecondScale - 3; // minus 3px for border
 
   // if less than a minute, don't show
   if (endDateTime - startDateTime < 1000 * 60) { 
