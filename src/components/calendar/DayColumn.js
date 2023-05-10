@@ -60,6 +60,13 @@ const DayColumn = ({
         loadTimeBlocks();
     }, [reloadFlag]);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            loadTimeBlocks();
+        }, 10000);
+        return () => clearInterval(intervalId);
+    }, []);
+
     // Time Grid Lines
     let hours = 24;
     let multiplier = 2
