@@ -46,7 +46,7 @@ const DayColumn = ({
             const activeTimer = await getActiveTimer();
             if (activeTimer) {
                 timeBlocks.push({
-                    id: 'active-timer',
+                    id: '$active-timer',
                     startDateTime: activeTimer.start * 1000,
                     endDateTime: Date.now(),
                     spentOn: activeTimer.activity,
@@ -160,7 +160,9 @@ const DayColumn = ({
                     height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
                     borderBottom: '2px solid #ed3e7b',
                     zIndex: 100,
-                }}>
+                }}
+                onClick={e => e.preventDefault()}
+                >
 
                 </div>
             )
@@ -234,7 +236,7 @@ const DayColumn = ({
         });
 
         timeBlocksSorted = [{
-            id: 'total',
+            id: '$total',
             spentOn: 'Total Recorded Time',
             durationSum: totalTime || 0,
             startDateTime: startDate,

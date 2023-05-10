@@ -89,7 +89,7 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
   const color = generateColorSeed(spentOn);
   return (
     <div
-      onClick={() => selectTimeBlock(timeBlock)}
+      onClick={() => !id.startsWith('$') && selectTimeBlock(timeBlock)}
       style={{
         position: calendarOptions.stackView ? null : 'absolute',
         top: `${topPosition}px`,
