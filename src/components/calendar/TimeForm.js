@@ -1,6 +1,6 @@
 import { deleteTimeBlock, upsertTimeBlock } from '@/pages/api/db';
 import { parseDurationMinutes, unparseDurationMinutes } from '@/utils/duration';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const getMinutes = (dateTime) => {
   return (new Date(dateTime)).getMinutes();
@@ -20,9 +20,10 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
   const [durationBorderColor, setDurationBorderColor] = useState(null);
   const [duration, setDuration] = useState(unparseDurationMinutes((timeBlock.endDateTime - timeBlock.startDateTime) / 1000 / 60));
   const [memo, setMemo] = useState(timeBlock.memo || '');
+  const textareaRef = useRef();
 
   const originalStartDateTime = new Date(timeBlock.startDateTime);
-
+  
   const newStartDateTime = new Date(
     originalStartDateTime.getFullYear(),
     originalStartDateTime.getMonth(),
@@ -70,6 +71,54 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
     await deleteTimeBlock(timeBlock);
     onDataChange();
   };
+
+  const handleTextAreaKeyDown = (event) => {
+    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault();
+      setMemo(memo + '\n');
+    } else if (event.key === 'Enter') {
+      handleSubmit(event);
+    }
+  };
+
+
+  useEffect(() => {
+    textareaRef.current.style.height = "auto"; // Reset the height
+    textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Then set it to the scroll height
+  }, [memo]); // Recalculate when the text changes
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Delete') {
+        handleDelete(event);
+        return;
+      }
+
+      // when we hit backspace and non of the inputs are active also delete
+      if (event.key === 'Backspace' &&
+          document.activeElement.tagName !== 'INPUT' &&
+          document.activeElement.tagName !== 'TEXTAREA') {
+        handleDelete(event);
+        return;
+      }
+
+      if (event.key == 'Enter',
+          document.activeElement.tagName !== 'INPUT' && 
+          document.activeElement.tagName !== 'TEXTAREA') {
+          handleSubmit(event);
+            return;
+      }
+
+      if (event.key === 'Escape') {
+        onDataChange();
+        return;
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []); 
 
   const handleCopy = async (e) => {
     e.preventDefault();
@@ -164,7 +213,7 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
               style={{ marginLeft: '5px' }}
             />
             <div  style={{ marginTop: '10px', width: '100%'}}>
-            <textarea onChange={e => setMemo(e.target.value)} value={memo} style={{ width: '95%', maxWidth: '95%'}}></textarea>
+            <textarea ref={textareaRef} onKeyDown={handleTextAreaKeyDown} onChange={e => setMemo(e.target.value)} value={memo} style={{ width: '95%', maxWidth: '95%', resize: 'none', height: 'auto', overflow: 'hidden' }}></textarea>
             </div>
           </label>
           </div>

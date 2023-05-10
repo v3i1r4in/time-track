@@ -3,6 +3,13 @@ import { format } from "date-fns";
 import { listTimeBlocks, upsertTimeBlock } from "@/pages/api/db";
 import TimeBlock from "./TimeBlock";
 import Calendar from "./Calendar";
+import t from "react-autocomplete-input";
+
+
+const getCurrentTimeMilisFromStartOfDay = () => {
+    const now = new Date();
+    return now.getTime() - new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime();
+};
 
 const DayColumn = ({
     date,
@@ -106,25 +113,28 @@ const DayColumn = ({
             let timeHour = (hourOffset + Math.floor(i / multiplier)) % 24;
             let timeMinute = Math.floor(i % multiplier) * Math.floor(60 / multiplier);
     
-            let currentTime = startDate + (i / multiplier) * 60 * 60 * 1000;
-            let nextTime = startDate + ((i + 1) / multiplier) * 60 * 60 * 1000;
+            // let currentTime = startDate + (i / multiplier) * 60 * 60 * 1000;
+            // let nextTime = startDate + ((i + 1) / multiplier) * 60 * 60 * 1000;
     
-            let backgroundColor = null;
+            // let backgroundColor = null;
     
     
-            if (isSidebar) {
-                if (nextTime < Date.now()) {
-                    backgroundColor = "#bbb";
-                } else if (currentTime < Date.now()) {
-                    backgroundColor = "#ddd";
-                }
-            }
-    
-            // if (containerHeight) {
-            //     if (i * heightPerLine < scrollTop - 1000 || i * heightPerLine > scrollTop + containerHeight + 1000) {
-            //         continue;
-            //     }
-            // }
+            // if (isSidebar) {
+            timeGrid.push(
+                <div 
+                key="currentTime"
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
+                    backgroundColor: isSidebar ? '#AAA' : undefined,
+                    borderBottom: '2px solid red',
+                }}>
+
+                </div>
+            )
     
             timeGrid.push(
                 <div
@@ -138,7 +148,7 @@ const DayColumn = ({
                         borderTop: `1px solid ${lineColor}`,
                         // color: '#ddd',
                         zIndex: 1,
-                        backgroundColor: backgroundColor,
+                        // backgroundColor: backgroundColor,
                     }}
                 >
                     {isSidebar && <>{timeHour.toString().padStart(2, '0')}:{timeMinute.toString().padStart(2, '0')}</>}
