@@ -159,7 +159,7 @@ const DayColumn = ({
                     right: 0,
                     height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
                     borderBottom: '2px solid #ed3e7b',
-                    zIndex: 999,
+                    zIndex: 100,
                 }}>
 
                 </div>
