@@ -24,27 +24,34 @@ export default function Home() {
       </Head>
       <div
         style={{
-          height: 'calc(100vh - 20px)',
-          width: 'calc(100vw - 20px)',
-          padding: '10px',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          width: '100vw',
+        }}
+      >
+        <div
+        style={{
+          margin: '10px',
+          flex: 1,
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
-        }}
-      >
-        <div style={{
-          marginBottom: '10px', width: '100%'
         }}>
-          <NoSSR>
-            <Timer minView/>
-          </NoSSR>
-        </div>
-        <div style={{
-          flex: 1,
-        }}>
-          <NoSSR>
-            <Calendar />
-          </NoSSR>
+          <div style={{
+            marginBottom: '10px', width: '100%'
+          }}>
+            <NoSSR>
+              <Timer minView/>
+            </NoSSR>
+          </div>
+          <div style={{
+            flex: 1,
+          }}>
+            <NoSSR>
+              <Calendar />
+            </NoSSR>
+          </div>
         </div>
       </div>
     </>

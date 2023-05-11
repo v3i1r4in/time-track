@@ -133,51 +133,9 @@ const DayColumn = ({
     
             let timeHour = (hourOffset + Math.floor(i / multiplier)) % 24;
             let timeMinute = Math.floor(i % multiplier) * Math.floor(60 / multiplier);
-    
-            // let currentTime = startDate + (i / multiplier) * 60 * 60 * 1000;
-            // let nextTime = startDate + ((i + 1) / multiplier) * 60 * 60 * 1000;
-    
-            // let backgroundColor = null;
-    
-    
-            // if (isSidebar) {
-            timeGrid.push(
-                <div 
-                key="currentTime"
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
-                    backgroundColor: isSidebar ? '#AAA' : undefined,
-                    zIndex: -200,
-                }}>
-
-                </div>
-            )
-            timeGrid.push(
-                <div 
-                key="currentTimeLine"
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
-                    borderBottom: '2px solid #ed3e7b',
-                    zIndex: -100,
-                    pointerEvents: 'none',
-                }}
-                onClick={e => e.preventDefault()}
-                >
-
-                </div>
-            )
-    
             timeGrid.push(
                 <div
-                    key={`timeLine-${i}`}
+                    key={`timeLine-${i}-${isSidebar}`}
                     style={{
                         top: `${i * heightPerLine}px`,
                         // top: '0px',
@@ -186,7 +144,6 @@ const DayColumn = ({
                         width: "100%",
                         borderTop: `1px solid ${lineColor}`,
                         // color: '#ddd',
-                        zIndex: -199,
                         // backgroundColor: backgroundColor,
                     }}
                 >
@@ -194,6 +151,40 @@ const DayColumn = ({
                 </div>
             );
         }
+
+        timeGrid.push(
+            <div 
+            key={`${isSidebar}-currentTime1`}
+            style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
+                backgroundColor: isSidebar ? '#AAA' : undefined,
+                zIndex: -1,
+            }}>
+
+            </div>
+        )
+
+        timeGrid.push(
+            <div 
+                key={`${isSidebar}-currentTime2`}
+                style={{
+                    position: "absolute",
+                    top: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
+                    left: 0,
+                    right: 0,
+                    height: 0,
+                    borderBottom: '2px solid #ed3e7b',
+                    pointerEvents: 'none',
+                    zIndex: 1,
+                }}
+            >
+
+            </div>
+        )
         return timeGrid;
     }
 
@@ -258,7 +249,7 @@ const DayColumn = ({
             showTimeValue && !calendarOptions.stackView && <div style={{
                 width: `56px`,
                 position: "relative",
-                height: `${heightPerLine * lines}px`,
+                minHeight: `${heightPerLine * lines}px`,
                 borderLeft: "none",
             }}>
                 {generateTimeGrid(true)}
@@ -267,7 +258,7 @@ const DayColumn = ({
         <div style={{
             width: calendarOptions.stackView ? (100 / 7) + "%" : `calc(${100 / 7}% - 8px)`,
             position: "relative",
-            height: `${heightPerLine * lines}px`,
+            height: calendarOptions.stackView ? 'fit-content' : `${heightPerLine * lines}px`,
             borderLeft: "1px solid #000",
         }}
             onDoubleClick={handleDoubleClick}
@@ -278,7 +269,6 @@ const DayColumn = ({
                 style={{
                     position: "sticky",
                     top: 0,
-                    zIndex: 0,
                     backgroundColor: isToday ? "#444" : "#eee",
                     margin: 0,
                     padding: "5px",
@@ -287,6 +277,8 @@ const DayColumn = ({
                     borderBottom: "1px solid #000",
                     // borderRadius: "5px",
                     marginBottom: "0px",
+
+                    zIndex: 2,
                 }}
             >{format(date, "EEE MMM dd")}</h5>
             <div>

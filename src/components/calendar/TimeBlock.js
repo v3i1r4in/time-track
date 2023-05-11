@@ -89,7 +89,10 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
   const color = generateColorSeed(spentOn);
   return (
     <div
-      onClick={() => !id?.toString().startsWith('$') && selectTimeBlock(timeBlock)}
+      onClick={() => {
+        console.log('click');
+        return !id?.toString().startsWith('$') && selectTimeBlock(timeBlock);
+      }}
       style={{
         position: calendarOptions.stackView ? null : 'absolute',
         top: `${topPosition}px`,
@@ -98,15 +101,9 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
         borderTop: "3px solid " + color,
         overflow: "hidden",
         ...(calendarOptions.stackView ? {minHeight: height} : {height: height}),
-        zIndex: 33 - 200,
         color: getForegroundColor(color),
         fontSize: '13px',
         backdropFilter: 'blur(3px)',
-
-        // display: 'flex',
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        // flexDirection: 'column',
       }}
     >
       < div style={{ margin: '3px'}}>

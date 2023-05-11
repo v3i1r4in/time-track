@@ -97,7 +97,6 @@ const Calendar = () => {
             left: '0px',
             right: '0px',
             overflow: 'scroll',
-            // overflow: 'scroll',
             display: "flex",
           }}>
             {days.map((day, index) => (

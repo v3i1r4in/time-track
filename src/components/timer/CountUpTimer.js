@@ -41,7 +41,7 @@ const CountUpTimer = ({ onCreateTimeBlock, activity, setActivity, minView }) => 
 
   useEffect(() => {
     if (timerActive) {
-      const timerId = setTimeout(() => setElapsed(elapsed + 1), 1000);
+      const timerId = setTimeout(() => setElapsed(Math.floor((Date.now() - startDateTime)/ 1000)), 1000);
       return () => clearTimeout(timerId);
     }
   }, [timerActive, elapsed]);

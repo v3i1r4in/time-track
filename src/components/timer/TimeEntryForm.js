@@ -43,7 +43,9 @@ const TimeEntryForm = ({ onActivityChange, onModeChange, activity, minView }) =>
                 ...baseStyles,
                 minWidth: '200px',
               }),
+              menuPortal: base => ({ ...base, zIndex: 9999 }),
             }}
+            menuPortalTarget={document.querySelector('body')}
           />
         </label>
         <label>

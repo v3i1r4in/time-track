@@ -93,7 +93,7 @@ const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity, minView }) =
   // if we are counting down, update remaining state
   useEffect(() => {
     if (timerActive && remaining > 0) {
-      const timerId = setTimeout(() => setRemainingState(remaining - 1), 1000);
+      const timerId = setTimeout(() => setRemainingState(duration - (Math.floor(Date.now() / 1000) - startDateTime)), 1000);
       return () => clearTimeout(timerId);
     } else if (!timerActive) {
       return;
