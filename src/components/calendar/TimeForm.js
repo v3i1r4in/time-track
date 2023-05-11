@@ -11,7 +11,7 @@ const getHours = (dateTime) => {
 }
 
 
-const TimeForm = ({ onDataChange, timeBlock }) => {
+const TimeForm = ({ onDataChange, timeBlock, hourOffset = 5 }) => {
   const [startTimeHour, setStartTimeHour] = useState(getHours(timeBlock.startDateTime));
   const [startTimeMinute, setStartTimeMinute] = useState(getMinutes(timeBlock.startDateTime));
   const [endTimeHour, setEndTimeHour] = useState(getHours(timeBlock.endDateTime));
@@ -27,14 +27,14 @@ const TimeForm = ({ onDataChange, timeBlock }) => {
   const newStartDateTime = new Date(
     originalStartDateTime.getFullYear(),
     originalStartDateTime.getMonth(),
-    originalStartDateTime.getDate(),
+    originalStartDateTime.getDate() += startTimeHour < hourOffset ? 1 : 0,
     startTimeHour,
     startTimeMinute);
 
   const newEndDateTime = new Date(
     originalStartDateTime.getFullYear(),
     originalStartDateTime.getMonth(),
-    originalStartDateTime.getDate(),
+    originalStartDateTime.getDate() += startTimeHour < hourOffset ? 1 : 0,
     endTimeHour,
     endTimeMinute);
 
