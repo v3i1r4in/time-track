@@ -1,8 +1,9 @@
 import { listTimeBlocks } from "@/pages/api/db";
+import { min } from "date-fns";
 import React, { useEffect, useState } from "react";
 import Select from 'react-select/creatable';
 
-const TimeEntryForm = ({ onActivityChange, onModeChange, activity }) => {
+const TimeEntryForm = ({ onActivityChange, onModeChange, activity, minView }) => {
   const [pastActivities, setPastActivities] = useState([]);
 
   useEffect(() => {
@@ -18,21 +19,31 @@ const TimeEntryForm = ({ onActivityChange, onModeChange, activity }) => {
   };
 
   return (
-    <div>
+    <div style={{
+      display: "flex",
+      alignItems: "center",
+      flex: 1,
+    }}>
       <form
         style={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: minView ? "row" : "column",
+          alignItems: "center",
           gap: "1rem",
-          marginBottom: "1rem"
+          marginBottom: !minView && "1rem"
         }}
       >
         <label>
           <Select
             value={{value: activity, label: activity}}
-            // defaultValue={activity}
             options={pastActivities.map(a => ({value: a, label: a}))}
             onChange={handleActivityChange}
+            styles={{
+              control: (baseStyles, state) => ({
+                ...baseStyles,
+                minWidth: '200px',
+              }),
+            }}
           />
         </label>
         <label>

@@ -33,21 +33,17 @@ export default function Home() {
         }}
       >
         <div style={{
-          display: 'flex', marginBottom: '10px', border: '1px solid #000', borderRadius: '5px'
+          marginBottom: '10px', width: '100%'
         }}>
-          <BTN setter={setCurrentPage} val={currentPage} setVal={'timer'}>TIMER</BTN>
-          <BTN setter={setCurrentPage} val={currentPage} setVal={'calendar'}>NIKI</BTN>
+          <NoSSR>
+            <Timer minView/>
+          </NoSSR>
         </div>
         <div style={{
           flex: 1,
         }}>
           <NoSSR>
-          {
-            currentPage === 'timer' && <Timer />
-          }
-          {
-            currentPage === 'calendar' && <Calendar />
-          }
+            <Calendar />
           </NoSSR>
         </div>
       </div>

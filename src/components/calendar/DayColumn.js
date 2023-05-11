@@ -151,7 +151,7 @@ const DayColumn = ({
                     right: 0,
                     height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
                     backgroundColor: isSidebar ? '#AAA' : undefined,
-                    zIndex: 0,
+                    zIndex: -200,
                 }}>
 
                 </div>
@@ -166,7 +166,7 @@ const DayColumn = ({
                     right: 0,
                     height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
                     borderBottom: '2px solid #ed3e7b',
-                    zIndex: 100,
+                    zIndex: -100,
                     pointerEvents: 'none',
                 }}
                 onClick={e => e.preventDefault()}
@@ -186,7 +186,7 @@ const DayColumn = ({
                         width: "100%",
                         borderTop: `1px solid ${lineColor}`,
                         // color: '#ddd',
-                        zIndex: 1,
+                        zIndex: -199,
                         // backgroundColor: backgroundColor,
                     }}
                 >
@@ -278,7 +278,7 @@ const DayColumn = ({
                 style={{
                     position: "sticky",
                     top: 0,
-                    zIndex: 200,
+                    zIndex: 0,
                     backgroundColor: isToday ? "#444" : "#eee",
                     margin: 0,
                     padding: "5px",

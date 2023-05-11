@@ -1,7 +1,7 @@
 import { getTimer, setTimer } from "@/pages/api/db";
 import React, { useState, useEffect } from "react";
 
-const CountUpTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
+const CountUpTimer = ({ onCreateTimeBlock, activity, setActivity, minView }) => {
   const [elapsed, setElapsed] = useState(0);
   const [timerActive, setTimerActiveState] = useState(false);
   const [startDateTime, setStartDateTimeState] = useState(null);
@@ -37,7 +37,7 @@ const CountUpTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
       }
     }
     fetchTimerFromDB();
-  });
+  }, []);
 
   useEffect(() => {
     if (timerActive) {
@@ -91,14 +91,19 @@ const CountUpTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
   }
 
   return (
-    <div>
-      <div style={{ fontSize: '30pt' }}>{timeDisplay}</div>
-      <p>
+    <div style={{
+      display: "flex",
+      flexDirection: minView ? "row" : "column",
+      alignItems: "center",
+    }}>
+
+      <div style={{ fontSize: !minView && '30pt', marginRight: minView && '20px' }}>{timeDisplay}</div>
+      <div>
         <button disabled={timerActive || !activity} onClick={handleStart}>Start</button>
         <button disabled={!timerActive} onClick={handleStop}>Stop</button>
         <button onClick={handleClear}>Clear</button>
         <button onClick={() => location.reload()}>Refresh</button>
-      </p>
+      </div>
     </div>
   );
 };

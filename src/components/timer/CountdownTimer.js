@@ -1,7 +1,7 @@
 import { getTimer, setTimer } from "@/pages/api/db";
 import React, { useState, useEffect } from "react";
 
-const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
+const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity, minView }) => {
   const [duration, setDuration] = useState(30 * 60);
   const [remaining, setRemainingState] = useState(duration);
   const [timerActive, setTimerActiveState] = useState(false);
@@ -112,9 +112,13 @@ const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity }) => {
   }, [remaining]);
 
   return (
-    <div>
-      <div style={{ fontSize: '30pt' }}>{Math.floor(remaining / 60).toString().padStart(2, "0")}:{(remaining % 60).toString().padStart(2, "0")}</div>
-      <select onChange={handleDurationChange}>
+    <div style={{
+      display: "flex",
+      flexDirection: minView ? "row" : "column",
+      alignItems: "center",
+    }}>
+      <div style={{ fontSize: !minView && '30pt', marginRight: minView && '20px' }}>{Math.floor(remaining / 60).toString().padStart(2, "0")}:{(remaining % 60).toString().padStart(2, "0")}</div>
+      <select onChange={handleDurationChange} style={{ marginRight: minView && '10px' }}>
         <option value="30">30m</option>
         <option value="60">1h</option>
         <option value="90">1.5h</option>

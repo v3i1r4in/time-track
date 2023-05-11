@@ -98,7 +98,7 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
         borderTop: "3px solid " + color,
         overflow: "hidden",
         ...(calendarOptions.stackView ? {minHeight: height} : {height: height}),
-        zIndex: 33,
+        zIndex: 33 - 200,
         color: getForegroundColor(color),
         fontSize: '13px',
         backdropFilter: 'blur(3px)',

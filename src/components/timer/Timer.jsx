@@ -6,7 +6,7 @@ import TimeBlockList from "./TimeBlockList";
 import { deleteTimeBlock, listTimeBlocks, upsertTimeBlock } from "@/pages/api/db";
 import NoSSR from "../NoSSR";
 
-function Timer() {
+function Timer({ minView = false }) {
   const [timeBlocks, setTimeBlocks] = useState([]);
   const [timerMode, setTimerModeState] = useState(window.localStorage.getItem("timerMode") || "countup");
   const [activity, setActivity] = useState("");
@@ -49,14 +49,15 @@ function Timer() {
         className="App"
         style={{
             display: "flex",
-            flexDirection: "column",
+            flexDirection: minView ? "row" : "column",
             justifyContent: "top",
-            alignItems: "center",
-            height: "100%",
+            alignItems: minView ? "stretch" : "center",
+            height: !minView && "100%",
             textAlign: "center",
             // backgroundColor: "#f5f5f5",
-            borderRadius: '10px',
-            border: '1px solid #000',
+            borderRadius: minView && '10px',
+            border: minView && '1px solid #000',
+            padding: minView && '10px',
         }}
     >
       <NoSSR>
@@ -65,17 +66,20 @@ function Timer() {
           onActivityChange={handleActivityChange}
           onModeChange={handleModeChange}
           activity={activity}
+          minView={minView}
         />
         {timerMode === "countdown" ? (
           <CountdownTimer
             onCreateTimeBlock={handleTimeBlockCreation}
             activity={activity}
             setActivity={setActivity}
+            minView={minView}
           />
         ) : (
-          <CountUpTimer onCreateTimeBlock={handleTimeBlockCreation} activity={activity} setActivity={setActivity} />
+          <CountUpTimer onCreateTimeBlock={handleTimeBlockCreation} activity={activity} setActivity={setActivity} minView={minView}/>
         )}
-        <TimeBlockList timeBlocks={timeBlocks} deleteTimeBlock={dTimeBlock} />
+        {!minView && <TimeBlockList timeBlocks={timeBlocks} deleteTimeBlock={dTimeBlock} />}
+        
       </NoSSR>
     </div>
   );
