@@ -17,6 +17,7 @@ const Calendar = () => {
   const [reloadFlag, setReloadFlag] = useState(0.123123);
   const [calendarOptions, setCalendarOptions] = useState({
     stackView: false,
+    sizeReflectDuration: false,
   });
 
   const reload = () => {
