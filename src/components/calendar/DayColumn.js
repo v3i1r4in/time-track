@@ -4,11 +4,12 @@ import { getActiveTimer, listTimeBlocks, upsertTimeBlock } from "@/pages/api/db"
 import TimeBlock from "./TimeBlock";
 import Calendar from "./Calendar";
 import t from "react-autocomplete-input";
+import { getStartOfTheDay } from "@/utils";
 
 
 const getCurrentTimeMilisFromStartOfDay = (miliOffeset) => {
     const offSetNow = new Date(new Date().getTime() - miliOffeset);
-    return miliOffeset + offSetNow.getTime() - new Date(offSetNow.getFullYear(), offSetNow.getMonth(), offSetNow.getDate(), 0, 0, 0).getTime();
+    return miliOffeset + offSetNow.getTime() - getStartOfTheDay(offSetNow).getTime();
 };
 
 const DayColumn = ({
@@ -24,6 +25,7 @@ const DayColumn = ({
     selectedTimeBlock,
     calendarOptions,
     numberOfColumns,
+    selectedDate,
 }) => {
     /** Zooming */
     const [timeBlocks, setTimeBlocks] = useState([]);
@@ -31,12 +33,14 @@ const DayColumn = ({
 
     const miliOffeset = hourOffset * 60 * 60 * 1000;
 
-    const startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0).getTime() + miliOffeset;
+    const startDate = getStartOfTheDay(date).getTime() + miliOffeset;
     const endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 0).getTime() + miliOffeset;
 
 
     const nowDate = new Date().getTime();
     const isToday = startDate <= nowDate && nowDate <= endDate;
+
+    const isSelected = selectedDate.getTime() === date.getTime();
 
     const loadTimeBlocks = async () => {
         const timeBlocks = await listTimeBlocks(
@@ -271,10 +275,12 @@ const DayColumn = ({
                 style={{
                     position: "sticky",
                     top: 0,
-                    backgroundColor: isToday ? "#444" : "#eee",
+                    backgroundColor: isSelected ? "#444" : (
+                        endDate > nowDate ? "#eee" : "#AAA"
+                    ),
                     margin: 0,
                     padding: "5px",
-                    color: isToday ? "#fff" : "#000",
+                    color: isSelected ? "#fff" : "#000",
                     // boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.2)",
                     borderBottom: "1px solid #000",
                     // borderRadius: "5px",

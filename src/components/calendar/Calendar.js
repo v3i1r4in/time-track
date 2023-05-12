@@ -5,11 +5,12 @@ import TimeForm from "./TimeForm";
 import DatePicker from "./DatePicker";
 import Head from 'next/head';
 import NoSSR from "../NoSSR";
+import { getStartOfTheDay } from "@/utils";
 
 const Calendar = () => {
   const smallestScale = 1 / (1000 * 80);
   const largestScale = 1 / (500);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(getStartOfTheDay(new Date()));
   const [pixelPerMilisecondScale, setPixelPerMilisecondScale] = useState(smallestScale);
   const scrollContainerRef = useRef();
   const [scrollTop, setScrollTop] = useState(0);
@@ -19,7 +20,7 @@ const Calendar = () => {
     stackView: false,
     sizeReflectDuration: true,
   });
-  const [calendarMode, setCalendarMode] = useState('week');
+  const [numberOfDays, setNumberOfDays] = useState(1);
 
   const reload = () => {
     setReloadFlag(Math.random());
@@ -60,17 +61,8 @@ const Calendar = () => {
   };
 
   const handleResize = () => {
-    if (scrollContainerRef.current.offsetWidth < 600) {
-      setCalendarMode('day');
-    } else if (scrollContainerRef.current.offsetWidth < 900) {
-      setCalendarMode('3days');
-    } else if (scrollContainerRef.current.offsetWidth > 1200) {
-      setCalendarMode('9days');
-    } else {
-      setCalendarMode('week');
-    }
+    setNumberOfDays(Math.floor(scrollContainerRef.current.offsetWidth / 200) || 1);
   };
-
 
   useEffect(() => {
     window.addEventListener("wheel", handleWheel, { passive: false });
@@ -89,19 +81,15 @@ const Calendar = () => {
 
   let days = [];
 
-  if (calendarMode === 'day') {
+  if (numberOfDays == 1) {
     days = [date];
-  } else if (calendarMode === '3days') {
+  } else if (numberOfDays == 2) {
     days = [
-      addDays(date, -1),
-      date,
-      addDays(date, 1),
+      addDays(new Date(date.getTime()), -1),
+      date
     ];
-  } else if (calendarMode === '9days') {
-    days = [...Array(9)].map((_, index) => addDays(date, index - 4));
-  } else if (calendarMode === 'week') {
-    const startWeek = startOfWeek(date, { weekStartsOn: 1 });
-    days = [...Array(7)].map((_, index) => addDays(startWeek, index));
+  } else {
+    days = [...Array(numberOfDays)].map((_, index) => addDays(new Date(date.getTime()), index - numberOfDays + 2));
   }
 
   let containerHeight = scrollContainerRef.current?.clientHeight;
@@ -133,7 +121,7 @@ const Calendar = () => {
           }}>
             {days.map((day, index) => (
               <DayColumn
-                key={format(day, "yyyy-MM-dd")}
+                key={day.getDate() + ''}
                 date={day}
                 showTimeValue={index === 0}
                 pixelPerMilisecondScale={pixelPerMilisecondScale}
@@ -144,6 +132,7 @@ const Calendar = () => {
                 reloadFlag={reloadFlag}
                 calendarOptions={calendarOptions}
                 numberOfColumns={days.length}
+                selectedDate={date}
               />
             ))}
           </div>
