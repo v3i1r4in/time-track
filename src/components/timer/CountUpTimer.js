@@ -97,8 +97,8 @@ const CountUpTimer = ({ onCreateTimeBlock, activity, setActivity, minView }) => 
       alignItems: "center",
     }}>
 
-      <div style={{ fontSize: !minView && '30pt', marginRight: minView && '20px' }}>{timeDisplay}</div>
-      <div>
+      <div style={{ fontSize: minView ? '24pt' : '30pt', marginRight: minView && '20px' }}>{timeDisplay}</div>
+      <div style={{ marginTop: !minView && "15px" }}>
         <button disabled={timerActive || !activity} onClick={handleStart}>Start</button>
         <button disabled={!timerActive} onClick={handleStop}>Stop</button>
         <button onClick={handleClear}>Clear</button>

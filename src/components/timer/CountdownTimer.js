@@ -117,7 +117,7 @@ const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity, minView }) =
       flexDirection: minView ? "row" : "column",
       alignItems: "center",
     }}>
-      <div style={{ fontSize: !minView && '30pt', marginRight: minView && '20px' }}>{Math.floor(remaining / 60).toString().padStart(2, "0")}:{(remaining % 60).toString().padStart(2, "0")}</div>
+      <div style={{ fontSize: minView ? '24pt' : '30pt', marginRight: minView && '20px' }}>{Math.floor(remaining / 60).toString().padStart(2, "0")}:{(remaining % 60).toString().padStart(2, "0")}</div>
       <select onChange={handleDurationChange} style={{ marginRight: minView && '10px' }}>
         <option value="30">30m</option>
         <option value="60">1h</option>
@@ -125,12 +125,12 @@ const CountdownTimer = ({ onCreateTimeBlock, activity, setActivity, minView }) =
         <option value="120">2h</option>
         <option value="0.1">6s</option>
       </select>
-      <p>
+      <div style={{ marginTop: !minView && "15px" }}>
         <button disabled={timerActive || !activity || remaining == 0} onClick={handleStart}>Start</button>
         <button disabled={!timerActive} onClick={handleStop}>Stop</button>
         <button onClick={handleReset}>Reset</button>
         <button onClick={() => location.reload()}>Refresh</button>
-      </p>
+      </div>
     </div>
   );
 };
