@@ -107,7 +107,7 @@ const TimeForm = ({ onDataChange, timeBlock}) => {
         return;
       }
 
-      if (event.key == 'Enter',
+      if (event.key == 'Enter' &&
           document.activeElement.tagName !== 'INPUT' && 
           document.activeElement.tagName !== 'TEXTAREA') {
           handleSubmit(event);
@@ -189,6 +189,13 @@ const TimeForm = ({ onDataChange, timeBlock}) => {
                 style={{ marginLeft: '5px', width: '60px' }}
               />
             </label>
+            
+            <button type="button" onClick={(e) => {
+              e.preventDefault();
+              setEndTimeHour(new Date().getHours());
+              setEndTimeMinute(new Date().getMinutes());
+            }} style={{ marginLeft: '5px' }}>Now</button>
+
             <label style={{ marginLeft: '5px' }}>
               Length
               <input

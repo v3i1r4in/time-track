@@ -90,7 +90,6 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
   return (
     <div
       onClick={() => {
-        console.log('click');
         return !id?.toString().startsWith('$') && selectTimeBlock(timeBlock);
       }}
       style={{
