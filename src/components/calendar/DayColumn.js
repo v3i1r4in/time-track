@@ -6,9 +6,9 @@ import Calendar from "./Calendar";
 import t from "react-autocomplete-input";
 
 
-const getCurrentTimeMilisFromStartOfDay = () => {
-    const now = new Date();
-    return now.getTime() - new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime();
+const getCurrentTimeMilisFromStartOfDay = (miliOffeset) => {
+    const offSetNow = new Date(new Date().getTime() - miliOffeset);
+    return miliOffeset + offSetNow.getTime() - new Date(offSetNow.getFullYear(), offSetNow.getMonth(), offSetNow.getDate(), 0, 0, 0).getTime();
 };
 
 const DayColumn = ({
@@ -160,7 +160,7 @@ const DayColumn = ({
                 top: 0,
                 left: 0,
                 right: 0,
-                height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
+                height: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay(miliOffeset) - miliOffeset),
                 backgroundColor: isSidebar ? '#AAA' : undefined,
                 zIndex: -1,
             }}>
@@ -173,7 +173,7 @@ const DayColumn = ({
                 key={`${isSidebar}-currentTime2`}
                 style={{
                     position: "absolute",
-                    top: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay() - miliOffeset),
+                    top: pixelPerMilisecondScale * Math.max(0, getCurrentTimeMilisFromStartOfDay(miliOffeset) - miliOffeset),
                     left: 0,
                     right: 0,
                     height: 0,
