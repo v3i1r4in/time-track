@@ -58,6 +58,7 @@ function Timer({ minView = false }) {
             borderRadius: minView && '10px',
             border: minView && '1px solid #000',
             padding: minView && '10px',
+            flexWrap: 'wrap',
         }}
     >
       <NoSSR>

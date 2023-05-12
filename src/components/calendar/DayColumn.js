@@ -23,6 +23,7 @@ const DayColumn = ({
     selectTimeBlock,
     selectedTimeBlock,
     calendarOptions,
+    numberOfColumns,
 }) => {
     /** Zooming */
     const [timeBlocks, setTimeBlocks] = useState([]);
@@ -257,7 +258,7 @@ const DayColumn = ({
             </div>
         }
         <div style={{
-            width: calendarOptions.stackView ? (100 / 7) + "%" : `calc(${100 / 7}% - 8px)`,
+            width: calendarOptions.stackView ? (100 / numberOfColumns) + "%" : `calc(${100 / numberOfColumns}% - 8px)`,
             position: "relative",
             height: calendarOptions.stackView ? 'fit-content' : `${heightPerLine * lines}px`,
             borderLeft: "1px solid #000",

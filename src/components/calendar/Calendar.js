@@ -19,6 +19,7 @@ const Calendar = () => {
     stackView: false,
     sizeReflectDuration: true,
   });
+  const [calendarMode, setCalendarMode] = useState('week');
 
   const reload = () => {
     setReloadFlag(Math.random());
@@ -58,20 +59,50 @@ const Calendar = () => {
     }
   };
 
+  const handleResize = () => {
+    if (scrollContainerRef.current.offsetWidth < 600) {
+      setCalendarMode('day');
+    } else if (scrollContainerRef.current.offsetWidth < 900) {
+      setCalendarMode('3days');
+    } else if (scrollContainerRef.current.offsetWidth > 1200) {
+      setCalendarMode('9days');
+    } else {
+      setCalendarMode('week');
+    }
+  };
+
+
   useEffect(() => {
     window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener("wheel", handleWheel, { passive: false });
+      window.removeEventListener('resize', handleResize);
     };
   }, [handleWheel]);
 
   useEffect(() => {
     handleScroll();
+    handleResize();
   }, []);
 
-  const startWeek = startOfWeek(date, { weekStartsOn: 1 });
-  const days = [...Array(7)].map((_, index) => addDays(startWeek, index));
+  let days = [];
+
+  if (calendarMode === 'day') {
+    days = [date];
+  } else if (calendarMode === '3days') {
+    days = [
+      addDays(date, -1),
+      date,
+      addDays(date, 1),
+    ];
+  } else if (calendarMode === '9days') {
+    days = [...Array(9)].map((_, index) => addDays(date, index - 4));
+  } else if (calendarMode === 'week') {
+    const startWeek = startOfWeek(date, { weekStartsOn: 1 });
+    days = [...Array(7)].map((_, index) => addDays(startWeek, index));
+  }
 
   let containerHeight = scrollContainerRef.current?.clientHeight;
 
@@ -112,6 +143,7 @@ const Calendar = () => {
                 selectedTimeBlock={selectedTimeBlock}
                 reloadFlag={reloadFlag}
                 calendarOptions={calendarOptions}
+                numberOfColumns={days.length}
               />
             ))}
           </div>
