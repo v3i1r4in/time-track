@@ -34,7 +34,8 @@ const DayColumn = ({
     const endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 0).getTime() + miliOffeset;
 
 
-    const isToday = new Date().toDateString() === date.toDateString();
+    const nowDate = new Date().getTime();
+    const isToday = startDate <= nowDate && nowDate <= endDate;
 
     const loadTimeBlocks = async () => {
         const timeBlocks = await listTimeBlocks(
