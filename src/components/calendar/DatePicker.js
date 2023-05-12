@@ -32,6 +32,18 @@ const DatePicker = ({date, setDate, calendarOptions, setCalendarOptions}) => {
             Stack View
           </label>
         </div>
+        {/* checkbox */}
+        <div style={{ marginLeft: '5px' }}>
+          <label>
+            <input
+              disabled={!calendarOptions.stackView}
+              type="checkbox"
+              checked={!calendarOptions.stackView || calendarOptions.sizeReflectDuration}
+              onChange={(event) => setCalendarOptions({...calendarOptions, sizeReflectDuration: event.target.checked})}
+            />
+            Size Reflect Duration
+          </label>
+        </div>
     </div>
   );
 };

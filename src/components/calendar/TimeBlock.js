@@ -82,7 +82,7 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
   const height = (endDateTime - startDateTime) * pixelPerMilisecondScale - 3; // minus 3px for border
 
   // if less than a minute, don't show
-  if (height < 0 && !calendarOptions.stackView) { 
+  if (height < 0 && (!calendarOptions.stackView || (calendarOptions.sizeReflectDuration && !id?.toString().startsWith('$total')))) { 
     return null;
   }
 
@@ -100,7 +100,7 @@ const TimeBlock = ({ timeBlock, selected = false, initialDateTime, pixelPerMilis
         background: hexToRgbA(color, selected ? 1 : 0.5),
         borderTop: "3px solid " + color,
         overflow: "hidden",
-        ...(calendarOptions.stackView ? {minHeight: height} : {height: height}),
+        ...(calendarOptions.stackView && !calendarOptions.sizeReflectDuration ? {minHeight: height} : {height: height}),
         color: getForegroundColor(color),
         fontSize: '13px',
         backdropFilter: 'blur(3px)',
