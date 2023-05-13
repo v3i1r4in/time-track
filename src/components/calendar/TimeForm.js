@@ -1,4 +1,4 @@
-import { deleteTimeBlock, upsertTimeBlock } from '@/pages/api/db';
+import { deleteTimeBlock, getTimeBlockWithNearestEndDateTimeBeforeDate, upsertTimeBlock } from '@/pages/api/db';
 import { parseDurationMinutes, unparseDurationMinutes } from '@/utils/duration';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -21,6 +21,7 @@ const TimeForm = ({ onDataChange, timeBlock}) => {
   const [duration, setDuration] = useState(unparseDurationMinutes((timeBlock.endDateTime - timeBlock.startDateTime) / 1000 / 60));
   const [memo, setMemo] = useState(timeBlock.memo || '');
   const textareaRef = useRef();
+  const handleSubmitRef = useRef();
 
   const originalStartDateTime = new Date(timeBlock.startDateTime);
   
@@ -71,6 +72,8 @@ const TimeForm = ({ onDataChange, timeBlock}) => {
     onDataChange();
   };
 
+  handleSubmitRef.current = handleSubmit;
+
   const handleDelete = async (e) => {
     e.preventDefault();
     await deleteTimeBlock(timeBlock);
@@ -110,8 +113,9 @@ const TimeForm = ({ onDataChange, timeBlock}) => {
       if (event.key == 'Enter' &&
           document.activeElement.tagName !== 'INPUT' && 
           document.activeElement.tagName !== 'TEXTAREA') {
-          handleSubmit(event);
-            return;
+          // because submit uses data from the state, we need to use the ref to get the latest data
+          handleSubmitRef.current(event);
+          return;
       }
 
       if (event.key === 'Escape') {
@@ -169,6 +173,15 @@ const TimeForm = ({ onDataChange, timeBlock}) => {
                 style={{ marginLeft: '5px', width: '60px' }}
               />
             </label>
+            <button type="button" onClick={async (e) => {
+              e.preventDefault();
+              const block = await getTimeBlockWithNearestEndDateTimeBeforeDate(newStartDateTime.getTime());
+              if (block) {
+                const dateObj = new Date(block.endDateTime);
+                setStartTimeHour(dateObj.getHours());
+                setStartTimeMinute(dateObj.getMinutes());
+              }
+            }} style={{ marginLeft: '5px' }}>Snap Previous</button>
             <label  style={{ marginLeft: '5px' }}>
               To
               <input
@@ -194,7 +207,7 @@ const TimeForm = ({ onDataChange, timeBlock}) => {
               e.preventDefault();
               setEndTimeHour(new Date().getHours());
               setEndTimeMinute(new Date().getMinutes());
-            }} style={{ marginLeft: '5px' }}>Now</button>
+            }} style={{ marginLeft: '5px' }}>Snap Now</button>
 
             <label style={{ marginLeft: '5px' }}>
               Length
@@ -207,7 +220,6 @@ const TimeForm = ({ onDataChange, timeBlock}) => {
                     setDurationMinutes(parseDurationMinutes(event.target.value));
                     setDurationBorderColor(null);
                   } catch (e) {
-                    console.log(e);
                     setDurationBorderColor('red');
                   }
                 }}

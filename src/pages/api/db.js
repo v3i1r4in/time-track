@@ -111,3 +111,24 @@ export async function getActiveTimer() {
   });
   return timer;
 }
+
+export async function getTimeBlockWithNearestEndDateTimeBeforeDate(date) {
+  const timeBlock = await prisma.timeBlock.findFirst({
+    where: {
+      endDateTime: {
+        lte: dateToEpochSeconds(date),
+      },
+    },
+    orderBy: {
+      endDateTime: 'desc',
+    },
+  });
+  
+  console.log('timeBlock', timeBlock);
+
+  return {
+    ...timeBlock,
+    startDateTime: epochSecondsToDate(timeBlock.startDateTime),
+    endDateTime: epochSecondsToDate(timeBlock.endDateTime),
+  };
+}
